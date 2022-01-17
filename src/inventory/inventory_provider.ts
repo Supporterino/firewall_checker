@@ -1,7 +1,7 @@
 import { Group, Host, InventoryLoader } from '.';
-import { logger } from '../utils';
+import { logger, Provider } from '../utils';
 
-export class InventoryProvider {
+export class InventoryProvider implements Provider {
   private __loader: InventoryLoader;
 
   private __hosts: Array<Host>;
@@ -13,7 +13,7 @@ export class InventoryProvider {
     this.__hosts = new Array<Host>();
   }
 
-  updateInventory() {
+  update() {
     this.__loader.loadInventory();
     this.loadGroups();
     this.loadHosts();
@@ -23,6 +23,10 @@ export class InventoryProvider {
     return this.__groups.find((element: Group) => {
       return element._name == name;
     })!;
+  }
+
+  getGroupNames(): Array<string> {
+    return this.__groups.map((e) => e._name);
   }
 
   private loadGroups() {
