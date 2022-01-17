@@ -13,6 +13,13 @@ export class Group {
     return this.__name;
   }
 
+  public get _hosts(): Array<Host> {
+    return this.__hosts;
+  }
+  public set _hosts(value: Array<Host>) {
+    this.__hosts = value;
+  }
+
   addHost(host: Host): void {
     this.__hosts.push(host);
   }

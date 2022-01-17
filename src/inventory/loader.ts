@@ -1,3 +1,4 @@
+import { group } from 'console';
 import { join } from 'path';
 import { Group, Host } from '.';
 import { logger, YamlLoader } from '../utils';
@@ -40,7 +41,6 @@ export class InventoryLoader {
     if (!this.__inventory) this.loadInventory();
     const output = new Array<Host>();
     for (const entry of this.__inventory['knuddels_servers']) {
-      logger.debug(entry);
       const host = new Host(entry.hostname, entry.ip);
       output.push(host);
       groups
@@ -68,6 +68,11 @@ export class InventoryLoader {
             ?.addHost(host);
         });
     }
+
+    const all_group = new Group('all');
+    all_group._hosts = output;
+    groups.push(all_group);
+
     return output;
   }
 }

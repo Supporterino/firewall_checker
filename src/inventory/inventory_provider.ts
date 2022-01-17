@@ -19,6 +19,12 @@ export class InventoryProvider {
     this.loadHosts();
   }
 
+  getGroupByName(name: string): Group {
+    return this.__groups.find((element: Group) => {
+      return element._name == name;
+    })!;
+  }
+
   private loadGroups() {
     this.__groups = this.__loader.loadGroups();
   }
