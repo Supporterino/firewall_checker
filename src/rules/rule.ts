@@ -1,4 +1,5 @@
 import { Protocol, RuleType } from '.';
+import { logger } from '../utils';
 
 export abstract class Rule {
   private __port: number;
@@ -43,5 +44,6 @@ export abstract class Rule {
     this.__comment = comment;
     this.__type = type;
     this.__target = target;
+    logger.silly(`Creating ${this.constructor.name}:`, this);
   }
 }

@@ -1,4 +1,5 @@
 import { Host } from '.';
+import { logger } from '../utils';
 
 export class Group {
   private __name: string;
@@ -7,6 +8,7 @@ export class Group {
   constructor(name: string) {
     this.__name = name;
     this.__hosts = new Array<Host>();
+    logger.silly(`Initialized Host:`, this);
   }
 
   public get _name(): string {
@@ -21,6 +23,7 @@ export class Group {
   }
 
   addHost(host: Host): void {
+    logger.debug(`Adding Host (${host.name}) to group (${this.__name})`);
     this.__hosts.push(host);
   }
 }

@@ -18,7 +18,7 @@ export class YamlLoader {
   loadYamlFileWithKey(path: string, key: string) {
     const data: any = this.loadYamlFile(path);
     if (!data[key]) {
-      throw new Error(`Key (${key}) not in file (${path})`);
+      logger.prettyError(Error(`Key (${key}) not in file (${path})`));
     }
     return data[key];
   }

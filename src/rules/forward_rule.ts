@@ -1,4 +1,5 @@
 import { Protocol, Rule, RuleType } from '.';
+import { logger } from '../utils';
 
 export class ForwardRule extends Rule {
   private __targetIP: string;

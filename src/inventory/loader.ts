@@ -15,10 +15,13 @@ export class InventoryLoader {
   }
 
   loadInventory() {
-    this.__inventory = this.__yamlLoader.loadYamlFile(this.__invPath);
+    logger.info('Loading main inventory.');
+    if (this.__yamlLoader.isLoadable(this.__invPath)) this.__inventory = this.__yamlLoader.loadYamlFile(this.__invPath);
+    else logger.prettyError(new Error(`The main inventory file is not present. Expected path is ${this.__invPath}`));
   }
 
   loadGroups(): Array<Group> {
+    logger.info('Building groups from inventory.');
     if (!this.__inventory) this.loadInventory();
     const groupNames = (
       this.__inventory['knuddels_ansible_groups'] +
@@ -38,6 +41,7 @@ export class InventoryLoader {
   }
 
   loadHosts(groups: Array<Group>): Array<Host> {
+    logger.info('Building hosts from inventory and adding them to the groups.');
     if (!this.__inventory) this.loadInventory();
     const output = new Array<Host>();
     for (const entry of this.__inventory['knuddels_servers']) {

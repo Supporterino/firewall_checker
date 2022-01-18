@@ -14,9 +14,11 @@ export class InventoryProvider implements Provider {
   }
 
   update() {
+    logger.info('Updating ansible inventory.');
     this.__loader.loadInventory();
     this.loadGroups();
     this.loadHosts();
+    logger.info('Updating ansible inventory finished.');
   }
 
   getGroupByName(name: string): Group {
@@ -27,6 +29,10 @@ export class InventoryProvider implements Provider {
 
   getGroupNames(): Array<string> {
     return this.__groups.map((e) => e._name);
+  }
+
+  getHostNames(): Array<string> {
+    return this.__hosts.map((e) => e.name);
   }
 
   private loadGroups() {
