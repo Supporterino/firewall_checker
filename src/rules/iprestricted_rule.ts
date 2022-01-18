@@ -12,7 +12,7 @@ export class IPRestrictedRule extends Rule {
   }
   constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string, allowedIPs: Array<string> | string) {
     super(port, proto, comment, type, target);
-    if (allowedIPs instanceof String) this.__allowedIPs = this.loadTargetsFromInventory(<string>allowedIPs);
+    if (typeof allowedIPs === 'string') this.__allowedIPs = this.loadTargetsFromInventory(<string>allowedIPs);
     else this.__allowedIPs = <Array<string>>allowedIPs;
   }
 
@@ -20,7 +20,7 @@ export class IPRestrictedRule extends Rule {
     const loader = new YamlLoader();
     const data = loader.loadYamlFileWithKey(
       join(process.cwd(), 'data/ansible/inventories/production/group_vars/all/vars'),
-      key.substring(2, -2).trim()
+      key.slice(2, -2).trim()
     );
     return data;
   }
