@@ -60,18 +60,33 @@ export class PortCheckProvider implements Provider {
       }
     }
 
-    // this.__portRuleChecks = this.deduplicateChecks(this.__portRuleChecks)
-    // this.__forwardRuleChecks = this.deduplicateChecks(this.__forwardRuleChecks)
-    // this.__ipRestricedRuleChecks = this.deduplicateChecks(this.__ipRestricedRuleChecks)
-    // this.__targetedRuleChecks = this.deduplicateChecks(this.__targetedRuleChecks)
+    this.__portRuleChecks = this.deduplicateChecks(this.__portRuleChecks)
+    this.__forwardRuleChecks = this.deduplicateChecks(this.__forwardRuleChecks)
+    this.__ipRestricedRuleChecks = this.deduplicateChecks(this.__ipRestricedRuleChecks)
+    this.__targetedRuleChecks = this.deduplicateChecks(this.__targetedRuleChecks)
 
     this.__checks = this.__checks.concat(this.__portRuleChecks, this.__forwardRuleChecks, this.__ipRestricedRuleChecks, this.__targetedRuleChecks)
   }
 
   @timed
   deduplicateChecks(arr: Array<PortCheck>): Array<PortCheck> {
-    return arr.filter((value: PortCheck, index: number, self: Array<PortCheck>) => {
-      // TODO: Add deduplication
+    const output = new Array<PortCheck>();
+    arr.forEach((check: PortCheck) => {
+      const dups = this.findIdentical(check, arr)
+      if (dups.length > 0) {
+        if (check._rule.type == RuleType.HOST && inventory_provider.findHostByName(check._rule.target).ip === check._host) output.push(check)
+        else if ()
+      } else {
+        output.push(check)
+      }
+    })
+
+    return output
+  }
+
+  findIdentical(item: PortCheck, arr: Array<PortCheck>): Array<PortCheck> {
+    return arr.filter(val => {
+      return item._host == val._host && item._port == val._port && item !== val
     })
   }
 

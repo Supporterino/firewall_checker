@@ -63,13 +63,13 @@ export class RuleLoader {
     for (const entry of data) {
       if (typeof entry.to_port === 'number')
         output.push(new PortRule(entry.to_port, getProtocol(entry.proto), entry.comment, type, target));
-      else if (getProtocol(entry.proto) === Protocol.TCP) {
-        const start = entry.to_port.split(':')[0];
-        const end = entry.to_port.split(':')[1];
-        for (let index = start; index <= end; index++) {
-          output.push(new PortRule(index, getProtocol(entry.proto), entry.comment, type, target));
-        }
-      }
+      // else if (getProtocol(entry.proto) === Protocol.TCP) {
+      //   const start = entry.to_port.split(':')[0];
+      //   const end = entry.to_port.split(':')[1];
+      //   for (let index = start; index <= end; index++) {
+      //     output.push(new PortRule(index, getProtocol(entry.proto), entry.comment, type, target));
+      //   }
+      // }
     }
     return output;
   }
