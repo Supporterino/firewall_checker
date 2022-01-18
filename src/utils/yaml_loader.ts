@@ -1,10 +1,14 @@
 import { logger } from '.';
 import { load } from 'js-yaml';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
 export class YamlLoader {
   constructor() {
     logger.info('Creating YamlLoader');
+  }
+
+  isLoadable(path: string) {
+    return existsSync(path);
   }
 
   loadYamlFile(path: string) {

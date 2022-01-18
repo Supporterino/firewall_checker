@@ -4,27 +4,18 @@ import { logger, Provider } from '../utils';
 
 export class RuleProvider implements Provider {
   private __rules: Array<Rule>;
-  private __globalRules: Array<Rule>;
   private __groupRules: Array<Rule>;
   private __loader: RuleLoader;
 
   constructor() {
     logger.info('Creating RuleProvider');
     this.__rules = new Array<Rule>();
-    this.__globalRules = new Array<Rule>();
     this.__groupRules = new Array<Rule>();
     this.__loader = new RuleLoader();
   }
 
   update(): void {
-    this.loadGlobalRules();
     this.loadGroupRules();
-  }
-
-  loadGlobalRules() {
-    const data = this.__loader.getRulesForGroup('all');
-    this.__globalRules = data;
-    this.__rules = this.__rules.concat(data);
   }
 
   loadGroupRules() {
@@ -34,7 +25,7 @@ export class RuleProvider implements Provider {
       this.__rules = this.__rules.concat(data);
     });
 
-    logger.debug(this.__groupRules);
+    logger.debug(this.__rules.length);
   }
 
   public get rules(): Array<Rule> {
