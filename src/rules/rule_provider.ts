@@ -16,6 +16,15 @@ export class RuleProvider implements Provider {
     this.__loader = new RuleLoader();
   }
 
+  stats(): string {
+    return `
+    RuleProvider Stats:
+    \tNumber of rules: ${this.__rules.length}
+    \tNumber of group rules: ${this.__groupRules.length}
+    \tNumber of host rules: ${this.__hostRules.length}
+    `;
+  }
+
   update(): void {
     logger.info('Updating firewall rules.');
     this.loadGroupRules();

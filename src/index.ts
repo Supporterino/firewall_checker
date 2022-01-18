@@ -8,4 +8,7 @@ export const rule_provider = new RuleProvider();
 inventory_provider.update();
 rule_provider.update();
 
+logger.info(inventory_provider.stats());
+logger.info(rule_provider.stats());
+
 // logger.debug(inventory_provider.groups.map((e) => e._name));

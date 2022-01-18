@@ -13,6 +13,14 @@ export class InventoryProvider implements Provider {
     this.__hosts = new Array<Host>();
   }
 
+  stats(): string {
+    return `
+    InventoryProvider Stats:
+    \tNumber of hosts: ${this.__hosts.length}
+    \tNumber of groups: ${this.__groups.length}
+    `;
+  }
+
   update() {
     logger.info('Updating ansible inventory.');
     this.__loader.loadInventory();
