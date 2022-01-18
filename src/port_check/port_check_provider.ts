@@ -59,7 +59,20 @@ export class PortCheckProvider implements Provider {
           break;
       }
     }
+
+    // this.__portRuleChecks = this.deduplicateChecks(this.__portRuleChecks)
+    // this.__forwardRuleChecks = this.deduplicateChecks(this.__forwardRuleChecks)
+    // this.__ipRestricedRuleChecks = this.deduplicateChecks(this.__ipRestricedRuleChecks)
+    // this.__targetedRuleChecks = this.deduplicateChecks(this.__targetedRuleChecks)
+
     this.__checks = this.__checks.concat(this.__portRuleChecks, this.__forwardRuleChecks, this.__ipRestricedRuleChecks, this.__targetedRuleChecks)
+  }
+
+  @timed
+  deduplicateChecks(arr: Array<PortCheck>): Array<PortCheck> {
+    return arr.filter((value: PortCheck, index: number, self: Array<PortCheck>) => {
+      // TODO: Add deduplication
+    })
   }
 
   generateJobsFromIPRestricedRule(rule: IPRestrictedRule): Array<PortCheck> {
