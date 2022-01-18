@@ -1,9 +1,9 @@
 import { Group, Host, InventoryLoader } from '.';
-import { logger, Provider } from '../utils';
+import { logger, Provider, timed } from '../utils';
 
 export class InventoryProvider implements Provider {
   private __loader: InventoryLoader;
-
+  private __groups: Array<Group>;
   private __hosts: Array<Host>;
 
   constructor() {
@@ -21,6 +21,7 @@ export class InventoryProvider implements Provider {
     `;
   }
 
+  @timed
   update() {
     logger.info('Updating ansible inventory.');
     this.__loader.loadInventory();
@@ -55,7 +56,6 @@ export class InventoryProvider implements Provider {
     return this.__hosts;
   }
 
-  private __groups: Array<Group>;
   public get groups(): Array<Group> {
     return this.__groups;
   }

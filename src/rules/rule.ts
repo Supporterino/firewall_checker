@@ -3,38 +3,38 @@ import { logger } from '../utils';
 
 export abstract class Rule {
   private __port: number;
-  protected get port(): number {
+  public get port(): number {
     return this.__port;
   }
-  protected set port(value: number) {
+  public set port(value: number) {
     this.__port = value;
   }
   private __proto: Protocol;
-  protected get proto(): Protocol {
+  public get proto(): Protocol {
     return this.__proto;
   }
-  protected set proto(value: Protocol) {
+  public set proto(value: Protocol) {
     this.__proto = value;
   }
   private __comment: string;
-  protected get comment(): string {
+  public get comment(): string {
     return this.__comment;
   }
-  protected set comment(value: string) {
+  public set comment(value: string) {
     this.__comment = value;
   }
   private __type: RuleType;
-  protected get type(): RuleType {
+  public get type(): RuleType {
     return this.__type;
   }
-  protected set type(value: RuleType) {
+  public set type(value: RuleType) {
     this.__type = value;
   }
   private __target: string;
-  protected get target(): string {
+  public get target(): string {
     return this.__target;
   }
-  protected set target(value: string) {
+  public set target(value: string) {
     this.__target = value;
   }
 

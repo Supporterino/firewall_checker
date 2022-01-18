@@ -1,6 +1,6 @@
 import { Rule, RuleLoader } from '.';
 import { inventory_provider } from '..';
-import { logger, Provider } from '../utils';
+import { logger, Provider, timed } from '../utils';
 
 export class RuleProvider implements Provider {
   private __rules: Array<Rule>;
@@ -25,6 +25,7 @@ export class RuleProvider implements Provider {
     `;
   }
 
+  @timed
   update(): void {
     logger.info('Updating firewall rules.');
     this.loadGroupRules();
