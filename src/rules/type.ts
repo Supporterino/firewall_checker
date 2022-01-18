@@ -12,10 +12,10 @@ export enum Protocol {
 export const getProtocol = (proto: string): Protocol => {
   switch (proto.toLowerCase().trim()) {
     case 'tcp':
-      return Protocol.TCP
+      return Protocol.TCP;
     case 'udp':
-      return Protocol.UDP
+      return Protocol.UDP;
     default:
-      return Protocol.TCP
+      return Protocol.TCP;
   }
-}
+};
