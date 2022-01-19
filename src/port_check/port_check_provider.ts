@@ -10,12 +10,11 @@ export class PortCheckProvider implements Provider {
   private __forwardRuleChecks!: Array<PortCheck>;
   private __ipRestricedRuleChecks!: Array<PortCheck>;
   private __targetedRuleChecks!: Array<PortCheck>;
-  constructor() {
-  }
+  constructor() {}
 
   initArrays() {
     this.__checks = new Array<PortCheck>();
-    this.__portRuleChecks  = new Array<PortCheck>();
+    this.__portRuleChecks = new Array<PortCheck>();
     this.__forwardRuleChecks = new Array<PortCheck>();
     this.__ipRestricedRuleChecks = new Array<PortCheck>();
     this.__targetedRuleChecks = new Array<PortCheck>();
@@ -40,7 +39,7 @@ export class PortCheckProvider implements Provider {
   }
 
   generatePortChecks() {
-    this.initArrays()
+    this.initArrays();
     for (const rule of rule_provider.rules) {
       switch (rule.constructor.name) {
         case PortRule.name:
@@ -60,41 +59,111 @@ export class PortCheckProvider implements Provider {
       }
     }
 
-    this.__portRuleChecks = this.deduplicateChecks(this.__portRuleChecks)
-    this.__forwardRuleChecks = this.deduplicateChecks(this.__forwardRuleChecks)
-    this.__ipRestricedRuleChecks = this.deduplicateChecks(this.__ipRestricedRuleChecks)
-    this.__targetedRuleChecks = this.deduplicateChecks(this.__targetedRuleChecks)
+    // this.__portRuleChecks = this.deduplicateChecks(this.__portRuleChecks);
+    // this.__forwardRuleChecks = this.deduplicateChecks(this.__forwardRuleChecks);
+    // this.__ipRestricedRuleChecks = this.deduplicateChecks(this.__ipRestricedRuleChecks);
+    // this.__targetedRuleChecks = this.deduplicateChecks(this.__targetedRuleChecks);
 
-    this.__checks = this.__checks.concat(this.__portRuleChecks, this.__forwardRuleChecks, this.__ipRestricedRuleChecks, this.__targetedRuleChecks)
+    this.__checks = this.__checks.concat(
+      this.__portRuleChecks,
+      this.__forwardRuleChecks,
+      this.__ipRestricedRuleChecks,
+      this.__targetedRuleChecks
+    );
+
+    this.__checks = this.deduplicateChecks(this.__checks);
+
+    // this.__checks.forEach((val) => {
+    //   const dups = this.findIdentical(val, this.__checks);
+    //   if (dups.length > 0) {
+    //     dups.push(val);
+    //     logger.debug(dups);
+    //   }
+    // });
   }
 
   @timed
   deduplicateChecks(arr: Array<PortCheck>): Array<PortCheck> {
     const output = new Array<PortCheck>();
-    arr.forEach((check: PortCheck) => {
-      const dups = this.findIdentical(check, arr)
-      if (dups.length > 0) {
-        if (check._rule.type == RuleType.HOST && inventory_provider.findHostByName(check._rule.target).ip === check._host) output.push(check)
-        else if ()
+    arr.forEach((check) => {
+      const duplicates = this.findIdentical(check, arr);
+      if (duplicates.length > 0) {
+        duplicates.push(check);
+        const to_add = this.determinWinningRule(duplicates);
+        if (this.shouldAdd(to_add, output)) output.push(to_add);
       } else {
-        output.push(check)
+        output.push(check);
       }
-    })
+    });
 
-    return output
+    return output;
+  }
+
+  fight(check: PortCheck, arr: Array<PortCheck>) {
+    const potential_candidates = this.findIdentical(check, arr)
+    potential_candidates.push(check)
+    const winner = this.determinWinningRule(potential_candidates)
+    if (winner === check) return true
+    return false
+  }
+
+  shouldAdd(to_add: PortCheck, arr: Array<PortCheck>): boolean {
+    const identicals = this.findIdentical(to_add, arr);
+    if (identicals.length === 0) return true;
+    return false;
+  }
+
+  determinWinningRule(checks: Array<PortCheck>): PortCheck {
+    const unique = this.isEqualChecks(checks);
+    if (unique) return unique;
+    const hierachieWinner = this.isHierachie(checks);
+    if (hierachieWinner) return hierachieWinner;
+    const ownRuleWinner = this.isOwnRule(checks);
+    if (ownRuleWinner) return ownRuleWinner;
+    logger.warn(checks);
+    throw new Error(`Can't deduplicate`);
+  }
+
+  isEqualChecks(checks: Array<PortCheck>): PortCheck | undefined {
+    const first = checks[0];
+    if (checks.every((val) => val._expected === first._expected && val._host === first._host && val._port === first._port)) return first;
+    return undefined;
+  }
+
+  isOwnRule(checks: Array<PortCheck>): PortCheck | undefined {
+    for (const check of checks) {
+      if (check._rule.type === RuleType.HOST && check._host == inventory_provider.findHostByName(check._rule.target).ip) return check;
+      if (check._rule.type === RuleType.GROUP && inventory_provider.getGroupByName(check._rule.target).isHostPartOfGroup(check._host))
+        return check;
+    }
+    return undefined;
+  }
+
+  isHierachie(checks: Array<PortCheck>): PortCheck | undefined {
+    const host_rules = checks.filter((val) => val._rule.type === RuleType.HOST);
+    if (host_rules.length === 1) return host_rules[0];
+    if (host_rules.length > 1) return undefined;
+    const group_rules = checks.filter((val) => val._rule.type === RuleType.GROUP);
+    if (group_rules.length === 1) return group_rules[0];
+    return undefined;
   }
 
   findIdentical(item: PortCheck, arr: Array<PortCheck>): Array<PortCheck> {
-    return arr.filter(val => {
-      return item._host == val._host && item._port == val._port && item !== val
-    })
+    return arr.filter((val) => {
+      return item._host == val._host && item._port == val._port && item !== val;
+    });
   }
 
   generateJobsFromIPRestricedRule(rule: IPRestrictedRule): Array<PortCheck> {
     const output = new Array<PortCheck>();
 
     inventory_provider.hosts.forEach((host: Host) => {
-      output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+      const check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+      if (this.shouldAdd(check, output)) output.push(check);
+      else if (this.fight(check, output)) {
+        const old = this.findIdentical(check, output)
+        old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+      }
     });
     return output;
   }
@@ -103,7 +172,12 @@ export class PortCheckProvider implements Provider {
     const output = new Array<PortCheck>();
 
     inventory_provider.hosts.forEach((host: Host) => {
-      output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+      const check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+      if (this.shouldAdd(check, output)) output.push(check);
+      else if (this.fight(check, output)) {
+        const old = this.findIdentical(check, output)
+        old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+      }
     });
     return output;
   }
@@ -113,20 +187,37 @@ export class PortCheckProvider implements Provider {
     switch (rule.type) {
       case RuleType.HOST:
         inventory_provider.hosts.forEach((host: Host) => {
-          if (host.name === rule.target) output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
-          else output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+          let check: PortCheck;
+          if (host.name === rule.target) check = new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule);
+          else check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+          if (this.shouldAdd(check, output)) output.push(check);
+          else if (this.fight(check, output)) {
+            const old = this.findIdentical(check, output)
+            old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+          }
         });
         break;
       case RuleType.GLOBAL:
         inventory_provider.hosts.forEach((host: Host) => {
-          output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
+          const check = new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule);
+          if (this.shouldAdd(check, output)) output.push(check);
+          else if (this.fight(check, output)) {
+            const old = this.findIdentical(check, output)
+            old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+          }
         });
         break;
       case RuleType.GROUP:
         inventory_provider.groups.forEach((group: Group) => {
           group._hosts.forEach((host: Host) => {
-            if (group._name === rule.target) output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
-            else output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+            let check: PortCheck;
+            if (group._name === rule.target) check = new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule);
+            else check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+            if (this.shouldAdd(check, output)) output.push(check);
+            else if (this.fight(check, output)) {
+              const old = this.findIdentical(check, output)
+              old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+            }
           });
         });
         break;
@@ -141,20 +232,37 @@ export class PortCheckProvider implements Provider {
     switch (rule.type) {
       case RuleType.HOST:
         inventory_provider.hosts.forEach((host: Host) => {
-          if (host.name === rule.target) output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
-          else output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+          let check: PortCheck;
+          if (host.name === rule.target) check = new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule);
+          else check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+          if (this.shouldAdd(check, output)) output.push(check);
+          else if (this.fight(check, output)) {
+            const old = this.findIdentical(check, output)
+            old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+          }
         });
         break;
       case RuleType.GLOBAL:
         inventory_provider.hosts.forEach((host: Host) => {
-          output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
+          const check = new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule);
+          if (this.shouldAdd(check, output)) output.push(check);
+          else if (this.fight(check, output)) {
+            const old = this.findIdentical(check, output)
+            old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+          }
         });
         break;
       case RuleType.GROUP:
         inventory_provider.groups.forEach((group: Group) => {
           group._hosts.forEach((host: Host) => {
-            if (group._name === rule.target) output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
-            else output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+            let check: PortCheck;
+            if (group._name === rule.target) check = new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule);
+            else check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+            if (this.shouldAdd(check, output)) output.push(check);
+            else if (this.fight(check, output)) {
+              const old = this.findIdentical(check, output)
+              old.forEach(to_remove => output.splice(output.indexOf(to_remove), 1))
+            }
           });
         });
         break;

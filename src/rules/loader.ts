@@ -66,7 +66,7 @@ export class RuleLoader {
       else if (getProtocol(entry.proto) === Protocol.TCP) {
         const start = entry.to_port.split(':')[0];
         const end = entry.to_port.split(':')[1];
-        for (let index = start; index <= end; index++) {
+        for (let index: number = start; index <= end; index++) {
           output.push(new PortRule(index, getProtocol(entry.proto), entry.comment, type, target));
         }
       }
@@ -83,7 +83,7 @@ export class RuleLoader {
       else if (getProtocol(entry.proto) === Protocol.TCP) {
         const start = entry.to_port.split(':')[0];
         const end = entry.to_port.split(':')[1];
-        for (let index = start; index <= end; index++) {
+        for (let index: number = start; index <= end; index++) {
           output.push(new IPRestrictedRule(index, getProtocol(entry.proto), entry.comment, type, target, entry.ips));
         }
       }
@@ -100,7 +100,7 @@ export class RuleLoader {
       else if (getProtocol(entry.proto) === Protocol.TCP) {
         const start = entry.to_port.split(':')[0];
         const end = entry.to_port.split(':')[1];
-        for (let index = start; index <= end; index++) {
+        for (let index: number = start; index <= end; index++) {
           output.push(new TargetedIPRule(index, getProtocol(entry.proto), entry.comment, type, target, entry.to_ip));
         }
       }
@@ -117,7 +117,7 @@ export class RuleLoader {
       else if (getProtocol(entry.proto) === Protocol.TCP) {
         const start = entry.to_port.split(':')[0];
         const end = entry.to_port.split(':')[1];
-        for (let index = start; index <= end; index++) {
+        for (let index: number = start; index <= end; index++) {
           output.push(new ForwardRule(index, getProtocol(entry.proto), entry.comment, type, target, entry.to_ip, entry.to_port));
         }
       }
