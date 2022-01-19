@@ -22,6 +22,11 @@ export class Group {
     this.__hosts = value;
   }
 
+  isHostPartOfGroup(host: string): boolean {
+    if (this.__hosts.find((val) => val.ip === host)) return true;
+    return false;
+  }
+
   addHost(host: Host): void {
     logger.debug(`Adding Host (${host.name}) to group (${this.__name})`);
     this.__hosts.push(host);

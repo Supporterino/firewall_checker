@@ -1,8 +1,10 @@
 import { InventoryProvider } from './inventory';
 import { PortCheckProvider } from './port_check';
 import { RuleProvider } from './rules/rule_provider';
-import { logger } from './utils';
+import { GitUpdater, logger } from './utils';
 
+// const git = new GitUpdater();
+// git.cloneRepo()
 export const inventory_provider = new InventoryProvider();
 export const rule_provider = new RuleProvider();
 export const port_check_provider = new PortCheckProvider();

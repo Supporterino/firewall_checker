@@ -45,7 +45,7 @@ export class InventoryProvider implements Provider {
   }
 
   findHostByName(name: string): Host {
-    return this.__hosts.find(e => e.name === name)!
+    return this.__hosts.find((e) => e.name === name)!;
   }
 
   private loadGroups() {
