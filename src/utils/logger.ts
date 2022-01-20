@@ -2,7 +2,7 @@ import { appendFileSync } from 'fs';
 import { join } from 'path';
 import { ILogObject, Logger, TLogLevelName } from 'tslog';
 
-const loglevel = process.env.LOG_LEVEL || 'silly';
+const loglevel = process.env.LOG_LEVEL || 'debug';
 const writeLogFile = (logObject: ILogObject): void => {
   // appendFileSync(join(process.cwd(), 'logs/main.log'), logObject + '\n');
 };
