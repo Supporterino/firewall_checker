@@ -11,6 +11,6 @@ export const rule_provider = new RuleProvider();
 export const port_check_provider = new PortCheckProvider();
 export const metrics_provider = new MetricsProvider();
 export const executor = new Executor();
-const runtime = new Runtime()
+const runtime = new Runtime();
 
-runtime.start()
+runtime.start();

@@ -26,8 +26,8 @@ export class GitUpdater {
   }
 
   async checkForChanges(): Promise<boolean> {
-    const result = this.gitCLI.pull()
-    if ((await result).summary.changes) return true
-    else return false
+    const result = this.gitCLI.pull();
+    if ((await result).summary.changes) return true;
+    else return false;
   }
 }
