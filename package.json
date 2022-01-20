@@ -17,6 +17,7 @@
     "js-yaml": "^4.1.0",
     "simple-git": "^2.48.0",
     "thread-pool-node": "^1.0.9",
+    "toad-scheduler": "^1.6.0",
     "tslog": "^3.3.1"
   },
   "devDependencies": {

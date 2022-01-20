@@ -24,4 +24,10 @@ export class GitUpdater {
     logger.info('Pulling changes for repository');
     this.gitCLI.pull();
   }
+
+  async checkForChanges(): Promise<boolean> {
+    const result = this.gitCLI.pull()
+    if ((await result).summary.changes) return true
+    else return false
+  }
 }
