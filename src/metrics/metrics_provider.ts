@@ -8,10 +8,12 @@ export class MetricsProvider implements Provider {
   private __app: express.Application;
   private __port: number;
   private __metrics: Array<string>;
+  private __updateCounter: number;
 
   constructor() {
     this.__metrics = new Array<string>();
     this.__port = <number>(process.env.PORT || 4242);
+    this.__updateCounter = 0;
     this.__app = express();
     this.__app.use(helmet());
     this.__app.enable('trust proxy');
@@ -25,7 +27,8 @@ export class MetricsProvider implements Provider {
 
   update(): void {
     this.__metrics = new Array<string>();
-    this.addMetric('port_check_update_count', 1, [{ last_update: Date.now().toLocaleString('de-DE') }]);
+    this.__updateCounter++
+    this.addMetric('port_check_update_count', this.__updateCounter, [{ last_update: (new Date()).toString() }]);
   }
 
   receiveMetric(result: RunResult, check: PortCheck): void {
