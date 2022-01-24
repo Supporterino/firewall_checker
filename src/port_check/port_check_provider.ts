@@ -100,14 +100,6 @@ export class PortCheckProvider implements Provider {
     return output;
   }
 
-  fight(check: PortCheck, arr: Array<PortCheck>) {
-    const potential_candidates = this.findIdentical(check, arr);
-    potential_candidates.push(check);
-    const winner = this.determinWinningRule(potential_candidates);
-    if (winner === check) return true;
-    return false;
-  }
-
   shouldAdd(to_add: PortCheck, arr: Array<PortCheck>): boolean {
     const identicals = this.findIdentical(to_add, arr);
     if (identicals.length === 0) return true;

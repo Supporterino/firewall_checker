@@ -17,9 +17,9 @@ export class MetricsProvider implements Provider {
     this.__updateCounter = 0;
     this.__app = express();
     this.__app.use(helmet());
-    this.__app.use(json())
+    this.__app.use(json());
     this.__app.enable('trust proxy');
-    this.__app.use('/api', router)
+    this.__app.use('/api', router);
     this.__app.get('/metrics', (req, res) => {
       res.send(`${this.__metrics.join('\n\n')}\n`);
     });
@@ -30,8 +30,8 @@ export class MetricsProvider implements Provider {
 
   update(): void {
     this.__metrics = new Array<string>();
-    this.__updateCounter++
-    this.addMetric('port_check_update_count', this.__updateCounter, [{ last_update: (new Date()).toString() }]);
+    this.__updateCounter++;
+    this.addMetric('port_check_update_count', this.__updateCounter, [{ last_update: new Date().toString() }]);
   }
 
   receiveMetric(result: RunResult, check: PortCheck): void {
@@ -53,15 +53,14 @@ export class MetricsProvider implements Provider {
   addMetric(name: string, value: number, labels?: Array<any>): void {
     if (!labels) labels = [];
 
-    if (process.env.NODE_ENV === 'production') labels.push({ host: process.env.HOSTNAME })
+    if (process.env.NODE_ENV === 'production') labels.push({ host: process.env.HOSTNAME });
     else labels.push({ host: hostname() });
 
-
-    let label_string = "";
+    let label_string = '';
 
     for (const label of labels) {
       for (const k in label) {
-        if (label_string === "") label_string += `${k}="${label[k]}"`;
+        if (label_string === '') label_string += `${k}="${label[k]}"`;
         else label_string += `, ${k}="${label[k]}"`;
       }
     }
