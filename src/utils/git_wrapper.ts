@@ -17,7 +17,7 @@ export class GitUpdater {
       this.pullChanges();
       return;
     }
-    this.gitCLI.clone('git@github.com:knuddelsgmbh/ansible.git');
+    this.gitCLI.clone(`https://${process.env.GITHUB_TOKEN}@github.com/knuddelsgmbh/ansible.git`);
   }
 
   pullChanges() {

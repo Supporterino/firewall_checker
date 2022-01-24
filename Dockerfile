@@ -16,4 +16,4 @@ RUN npm install
 COPY --from=0 /usr/local/app/build ./
 ENV NODE_ENV production
 
-CMD ["npm", "run", "start"]
+CMD ["node", "index.js"]
