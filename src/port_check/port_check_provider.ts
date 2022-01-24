@@ -69,7 +69,7 @@ export class PortCheckProvider implements Provider {
     for (const rule of rule_provider.rules) {
       switch (rule.constructor.name) {
         case PortRule.name:
-          negativeJobs = negativeJobs.concat(this.generateJobsFromPortRule(rule));
+          negativeJobs = negativeJobs.concat(this.generateNegativeJobsFromPortRule(rule));
           break;
         default:
           break;
