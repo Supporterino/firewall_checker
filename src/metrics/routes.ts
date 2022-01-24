@@ -42,7 +42,7 @@ router.post('/update', async (req, res) => {
     }
 })
 
-router.post('run', (req, res) => {
+router.post('/run', (req, res) => {
     executor.run()
     res.send('Executing checks')
 })
