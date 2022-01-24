@@ -17,11 +17,17 @@ export class GitUpdater {
       this.pullChanges();
       return;
     }
-    this.gitCLI.clone('git@github.com:knuddelsgmbh/ansible.git');
+    this.gitCLI.clone(`https://${process.env.GITHUB_TOKEN}@github.com/knuddelsgmbh/ansible.git`);
   }
 
   pullChanges() {
     logger.info('Pulling changes for repository');
     this.gitCLI.pull();
+  }
+
+  async checkForChanges(): Promise<boolean> {
+    const result = this.gitCLI.pull();
+    if ((await result).summary.changes) return true;
+    else return false;
   }
 }

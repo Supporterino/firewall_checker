@@ -1,5 +1,5 @@
 import { Socket } from 'net';
-import { ExpectedResult } from '.';
+import { ExpectedResult, RunResult } from '.';
 import { Rule } from '../rules';
 
 export class PortCheck {
