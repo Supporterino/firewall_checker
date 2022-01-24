@@ -9,11 +9,6 @@ export class Runtime {
 
   start() {
     git_updater.cloneRepo();
-    (async () => { 
-      console.log('before delay')
-      await new Promise(f => setTimeout(f, 100000));
-      console.log('after delay')
-  })();
     inventory_provider.update();
     rule_provider.update();
     port_check_provider.update();
