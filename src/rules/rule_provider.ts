@@ -28,6 +28,9 @@ export class RuleProvider implements Provider {
   @timed
   update(): void {
     logger.info('Updating firewall rules.');
+    this.__rules = new Array<Rule>();
+    this.__groupRules = new Array<Rule>();
+    this.__hostRules = new Array<Rule>();
     this.loadGroupRules();
     this.loadHostRule();
     logger.info('Updating firewall rules finished.');
