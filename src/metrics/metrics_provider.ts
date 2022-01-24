@@ -18,7 +18,7 @@ export class MetricsProvider implements Provider {
     this.__app.use(helmet());
     this.__app.enable('trust proxy');
     this.__app.get('/metrics', (req, res) => {
-      res.send(this.__metrics.join('<br/>'));
+      res.send(`${this.__metrics.join('\n\n')}\n`);
     });
     this.__app.listen(this.__port, () => {
       logger.info(`Started MetricsProvier on port ${this.__port}.`);
