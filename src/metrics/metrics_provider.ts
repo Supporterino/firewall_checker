@@ -56,7 +56,7 @@ export class MetricsProvider implements Provider {
     for (const label of labels) {
       for (const k in label) {
         if (label_string === "") label_string += `${k}="${label[k]}"`;
-        else label_string += `, ${k}='${label[k]}'`;
+        else label_string += `, ${k}="${label[k]}"`;
       }
     }
 
