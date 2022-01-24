@@ -50,7 +50,10 @@ export class MetricsProvider implements Provider {
   addMetric(name: string, value: number, labels?: Array<any>): void {
     if (!labels) labels = [];
 
-    labels.push({ host: hostname() });
+    if (process.env.NODE_ENV === 'production') labels.push({ host: process.env.HOSTNAME })
+    else labels.push({ host: hostname() });
+
+
     let label_string = "";
 
     for (const label of labels) {
