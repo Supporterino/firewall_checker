@@ -51,11 +51,11 @@ export class MetricsProvider implements Provider {
     if (!labels) labels = [];
 
     labels.push({ host: hostname() });
-    let label_string = '';
+    let label_string = "";
 
     for (const label of labels) {
       for (const k in label) {
-        if (label_string === '') label_string += `${k}='${label[k]}'`;
+        if (label_string === "") label_string += `${k}="${label[k]}"`;
         else label_string += `, ${k}='${label[k]}'`;
       }
     }
