@@ -1,8 +1,9 @@
 import { logger, Provider } from '../utils';
-import express from 'express';
+import express, { json } from 'express';
 import helmet from 'helmet';
-import { hostname, networkInterfaces } from 'os';
+import { hostname } from 'os';
 import { PortCheck, RunResult } from '../port_check';
+import { router } from '.';
 
 export class MetricsProvider implements Provider {
   private __app: express.Application;
@@ -16,7 +17,9 @@ export class MetricsProvider implements Provider {
     this.__updateCounter = 0;
     this.__app = express();
     this.__app.use(helmet());
+    this.__app.use(json())
     this.__app.enable('trust proxy');
+    this.__app.use('/api', router)
     this.__app.get('/metrics', (req, res) => {
       res.send(`${this.__metrics.join('\n\n')}\n`);
     });
