@@ -1,6 +1,6 @@
 import { ExpectedResult, RunResult } from '.';
 import { metrics_provider, port_check_provider } from '..';
-import { logger, timed } from '../utils';
+import { timed } from '../utils';
 
 export class Executor {
   constructor() {}
