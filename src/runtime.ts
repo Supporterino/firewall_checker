@@ -26,7 +26,7 @@ export class Runtime {
       executor.run();
     });
     const update_job = new SimpleIntervalJob({ hours: 2, runImmediately: false }, update_task);
-    const run_job = new SimpleIntervalJob({ minutes: 20, runImmediately: false }, run_task);
+    const run_job = new SimpleIntervalJob({ minutes: 20, runImmediately: true }, run_task);
     this.__scheduler.addSimpleIntervalJob(update_job);
     this.__scheduler.addSimpleIntervalJob(run_job);
   }
