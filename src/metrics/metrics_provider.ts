@@ -21,12 +21,12 @@ export class MetricsProvider implements Provider {
     this.__app = express();
     this.__app.use(helmet());
     this.__app.use(json());
-    this.__app.enable('trust proxy');
     this.__app.use('/api', router);
     this.__app.use('/docs', express.static('./docs'));
     this.__app.get('/metrics', (req, res) => {
       res.send(`${this.__metrics.join('\n\n')}\n`);
     });
+    this.__app.enable('trust proxy');
     this.__app.listen(this.__port, () => {
       logger.info(`Started MetricsProvier on port ${this.__port}.`);
     });
