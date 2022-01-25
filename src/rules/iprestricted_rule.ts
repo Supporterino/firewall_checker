@@ -24,7 +24,13 @@ export class IPRestrictedRule extends Rule {
     else this.__allowedIPs = <Array<string>>allowedIPs;
   }
 
-  loadTargetsFromInventory(key: string): Array<string> {
+  /**
+   * Some firewall rules have a shared access list which is stored in a separate yaml key. This function loads
+   * those list if the structure is detected in the rule.
+   * @param key The yaml key which holds the list of hosts
+   * @returns A string array with all allowed ips
+   */
+  private loadTargetsFromInventory(key: string): Array<string> {
     const loader = new YamlLoader();
     const data = loader.loadYamlFileWithKey(
       join(process.cwd(), 'data/ansible/inventories/production/group_vars/all/vars'),

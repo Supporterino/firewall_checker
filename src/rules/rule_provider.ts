@@ -2,6 +2,9 @@ import { Rule, RuleLoader } from '.';
 import { inventory_provider } from '..';
 import { logger, Provider, timed } from '../utils';
 
+/**
+ * This class provides the firewall rules from a given inventory
+ */
 export class RuleProvider implements Provider {
   private __rules: Array<Rule>;
   private __groupRules: Array<Rule>;
@@ -16,6 +19,10 @@ export class RuleProvider implements Provider {
     this.__loader = new RuleLoader();
   }
 
+  /**
+   * Returns the number of rules for hosts, groups and total
+   * @returns The string representing the stats
+   */
   stats(): string {
     return `
     RuleProvider Stats:
@@ -25,6 +32,9 @@ export class RuleProvider implements Provider {
     `;
   }
 
+  /**
+   * Triggers the reload of a rules.
+   */
   @timed
   update(): void {
     logger.info('Updating firewall rules.');
@@ -36,7 +46,10 @@ export class RuleProvider implements Provider {
     logger.info('Updating firewall rules finished.');
   }
 
-  private loadHostRule() {
+  /**
+   * Load the hosts from the `InventoryProvider` and create the rules for each host with the `RuleLoader`
+   */
+  private loadHostRule(): void {
     logger.info('Loading host firewall rules');
     inventory_provider.getHostNames().forEach((hostName: string) => {
       const data = this.__loader.getRulesForHost(hostName);
@@ -45,7 +58,10 @@ export class RuleProvider implements Provider {
     });
   }
 
-  private loadGroupRules() {
+  /**
+   * Load the groups from the `InventoryProvider` and create the rules for each group with the `RuleLoader`
+   */
+  private loadGroupRules(): void {
     logger.info('Loading group firewall rules');
     inventory_provider.getGroupNames().forEach((groupName: string) => {
       const data = this.__loader.getRulesForGroup(groupName);
