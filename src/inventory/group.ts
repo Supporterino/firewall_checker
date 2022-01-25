@@ -22,11 +22,20 @@ export class Group {
     this.__hosts = value;
   }
 
+  /**
+   * Checks if a `Host` is part of a `Group`
+   * @param host The `Host` to check
+   * @returns boolean indicating if the `Host` is part of the `Group`
+   */
   isHostPartOfGroup(host: string): boolean {
     if (this.__hosts.find((val) => val.ip === host)) return true;
     return false;
   }
 
+  /**
+   * Append a `Host` to the hosts of a group
+   * @param host The `Host` to add
+   */
   addHost(host: Host): void {
     logger.debug(`Adding Host (${host.name}) to group (${this.__name})`);
     this.__hosts.push(host);
