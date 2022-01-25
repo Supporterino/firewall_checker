@@ -83,14 +83,6 @@ export class PortCheckProvider implements Provider {
     );
 
     this.__checks = this.deduplicateChecks(this.__checks);
-
-    this.__checks.forEach((val) => {
-      const dups = this.findIdentical(val, this.__checks);
-      if (dups.length > 0) {
-        dups.push(val);
-        logger.debug(dups);
-      }
-    });
   }
 
   @timed
