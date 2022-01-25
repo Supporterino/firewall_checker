@@ -1,0 +1,7 @@
+{
+    "out": "docs",
+    "entryPoint": "./src/index.ts",
+    "includeVersion": "true",
+    "name": "Firewall Check",
+    "readme": "./README.md"
+}

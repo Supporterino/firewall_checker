@@ -23,6 +23,7 @@ export class MetricsProvider implements Provider {
     this.__app.use(json());
     this.__app.enable('trust proxy');
     this.__app.use('/api', router);
+    this.__app.use('/docs', express.static('./docs'));
     this.__app.get('/metrics', (req, res) => {
       res.send(`${this.__metrics.join('\n\n')}\n`);
     });
