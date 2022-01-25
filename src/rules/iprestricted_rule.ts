@@ -10,7 +10,15 @@ export class IPRestrictedRule extends Rule {
   public set allowedIPs(value: Array<string>) {
     this.__allowedIPs = value;
   }
-  constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string, allowedIPs: Array<string> | string, isRange: boolean = false) {
+  constructor(
+    port: number,
+    proto: Protocol,
+    comment: string,
+    type: RuleType,
+    target: string,
+    allowedIPs: Array<string> | string,
+    isRange: boolean = false
+  ) {
     super(port, proto, comment, type, target, isRange);
     if (typeof allowedIPs === 'string') this.__allowedIPs = this.loadTargetsFromInventory(<string>allowedIPs);
     else this.__allowedIPs = <Array<string>>allowedIPs;

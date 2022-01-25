@@ -16,7 +16,16 @@ export class ForwardRule extends Rule {
   public set targetPort(value: number) {
     this.__targetPort = value;
   }
-  constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string, targetIP: string, targetPort: number, isRange: boolean = false) {
+  constructor(
+    port: number,
+    proto: Protocol,
+    comment: string,
+    type: RuleType,
+    target: string,
+    targetIP: string,
+    targetPort: number,
+    isRange: boolean = false
+  ) {
     super(port, proto, comment, type, target, isRange);
     this.__targetIP = targetIP;
     this.__targetPort = targetPort;
