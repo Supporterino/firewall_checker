@@ -37,6 +37,11 @@ router.post('/update', async (req, res) => {
       if (result) res.send('Updated sources');
       else res.send('No changes on source remote');
       break;
+    case 'all':
+      inventory_provider.update();
+      rule_provider.update();
+      port_check_provider.update();
+      break;
     default:
       break;
   }
