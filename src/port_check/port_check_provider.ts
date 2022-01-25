@@ -65,6 +65,16 @@ export class PortCheckProvider implements Provider {
       }
     }
 
+    for (const rule of rule_provider.rules) {
+      switch (rule.constructor.name) {
+        case PortRule.name:
+          this.__portRuleChecks = this.__portRuleChecks.concat(this.generateNegativeJobsFromPortRule(rule));
+          break;
+        default:
+          break;
+      }
+    }
+
     this.__checks = this.__checks.concat(
       this.__portRuleChecks,
       this.__forwardRuleChecks,
@@ -73,14 +83,6 @@ export class PortCheckProvider implements Provider {
     );
 
     this.__checks = this.deduplicateChecks(this.__checks);
-
-    this.__checks.forEach((val) => {
-      const dups = this.findIdentical(val, this.__checks);
-      if (dups.length > 0) {
-        dups.push(val);
-        logger.debug(dups);
-      }
-    });
   }
 
   @timed
@@ -98,14 +100,6 @@ export class PortCheckProvider implements Provider {
     });
 
     return output;
-  }
-
-  fight(check: PortCheck, arr: Array<PortCheck>) {
-    const potential_candidates = this.findIdentical(check, arr);
-    potential_candidates.push(check);
-    const winner = this.determinWinningRule(potential_candidates);
-    if (winner === check) return true;
-    return false;
   }
 
   shouldAdd(to_add: PortCheck, arr: Array<PortCheck>): boolean {
@@ -218,6 +212,33 @@ export class PortCheckProvider implements Provider {
           group._hosts.forEach((host: Host) => {
             if (group._name === rule.target) output.push(new PortCheck(host.ip, rule.port, ExpectedResult.OPEN, rule));
             else output.push(new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule));
+          });
+        });
+        break;
+      default:
+        break;
+    }
+    return output;
+  }
+
+  generateNegativeJobsFromPortRule(rule: PortRule): Array<PortCheck> {
+    const output = new Array<PortCheck>();
+    switch (rule.type) {
+      case RuleType.HOST:
+        inventory_provider.hosts.forEach((host: Host) => {
+          if (host.name !== rule.target && !rule.isRangeRule) {
+            const check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+            if (this.shouldAdd(check, this.__portRuleChecks)) output.push(check);
+          }
+        });
+        break;
+      case RuleType.GROUP:
+        inventory_provider.groups.forEach((group: Group) => {
+          group._hosts.forEach((host: Host) => {
+            if (group._name !== rule.target && !rule.isRangeRule) {
+              const check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
+              if (this.shouldAdd(check, this.__portRuleChecks)) output.push(check);
+            }
           });
         });
         break;

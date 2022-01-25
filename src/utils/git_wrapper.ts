@@ -8,16 +8,22 @@ export class GitUpdater {
 
   constructor() {
     logger.info('Creating new GitUpdater');
-    this.gitCLI = simpleGit(join(process.cwd(), 'data'));
+    if (this.checkIfRepoExists()) this.gitCLI = simpleGit(join(process.cwd(), 'data/ansible'));
+    else this.gitCLI = simpleGit(join(process.cwd(), 'data'));
+  }
+
+  checkIfRepoExists(): boolean {
+    return existsSync(join(process.cwd(), 'data', 'ansible'));
   }
 
   cloneRepo() {
-    if (existsSync(join(process.cwd(), 'data', 'ansible'))) {
+    if (this.checkIfRepoExists()) {
       logger.info('Repository is already cloned. Pulling...');
       this.pullChanges();
       return;
     }
     this.gitCLI.clone(`https://${process.env.GITHUB_TOKEN}@github.com/knuddelsgmbh/ansible.git`);
+    this.gitCLI = simpleGit(join(process.cwd(), 'data/ansible'));
   }
 
   pullChanges() {
