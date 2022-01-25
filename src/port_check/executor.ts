@@ -1,13 +1,22 @@
 import { ExpectedResult, RunResult } from '.';
 import { metrics_provider, port_check_provider } from '..';
-import { timed } from '../utils';
+import { logger, timed } from '../utils';
 
+/**
+ * Wrapper class to run all the promises from the `PortCheckProvier`
+ */
 export class Executor {
   constructor() {}
 
+  /**
+   * Execute the `PortCheck`s and send the result to the `MetricsProvider`
+   */
   @timed
-  run() {
+  run(): void {
+    logger.info('Execution PortChecks')
+    logger.debug('Updating last run time')
     metrics_provider.update();
+    logger.debug('Running checks from the PortCheckProvider')
     port_check_provider.checks.forEach((a_check) => {
       a_check
         .getTask()
