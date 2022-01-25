@@ -9,3 +9,7 @@ export enum RunResult {
   EXPECTED_CLOSED_BUT_OPEN,
   ERROR
 }
+
+export const getExpectedAsString = (input: ExpectedResult): string => {
+  return ((input === ExpectedResult.OPEN) ? 'open' : 'closed')
+}
