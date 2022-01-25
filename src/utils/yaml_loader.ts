@@ -16,7 +16,7 @@ export class YamlLoader {
    * @returns boolean indecating if a file is present
    */
   isLoadable(path: string): boolean {
-    logger.debug(`Checking for yaml file at ${path}`)
+    logger.debug(`Checking for yaml file at ${path}`);
     return existsSync(path);
   }
 
@@ -26,7 +26,7 @@ export class YamlLoader {
    * @returns the yaml data as a JavaScript object
    */
   loadYamlFile(path: string): any {
-    logger.debug(`Loading yaml file at ${path}`)
+    logger.debug(`Loading yaml file at ${path}`);
     return load(readFileSync(path, 'utf-8'));
   }
 
@@ -37,7 +37,7 @@ export class YamlLoader {
    * @returns the yaml data as a JavaScript object
    */
   loadYamlFileWithKey(path: string, key: string): any {
-    logger.debug(`Loading yaml file at ${path} and returning key: ${key}`)
+    logger.debug(`Loading yaml file at ${path} and returning key: ${key}`);
     const data: any = this.loadYamlFile(path);
     if (!data[key]) {
       logger.prettyError(Error(`Key (${key}) not in file (${path})`));

@@ -8,7 +8,7 @@ export enum RuleType {
 }
 
 /**
- * Enum to determine the protocol a firewall rule is used for 
+ * Enum to determine the protocol a firewall rule is used for
  */
 export enum Protocol {
   TCP,

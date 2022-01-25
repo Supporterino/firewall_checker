@@ -50,7 +50,7 @@ export class PortCheck {
     this.__rule = rule;
     this.__expected = expected;
     this.__timeout = <number>(process.env.PORT_CHECK_TIMEOUT || 1000);
-    logger.debug(`Creating PortCheck for --> ${this.__host}:${this.__port}`)
+    logger.debug(`Creating PortCheck for --> ${this.__host}:${this.__port}`);
   }
 
   /**

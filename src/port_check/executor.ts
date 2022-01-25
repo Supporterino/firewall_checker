@@ -13,10 +13,10 @@ export class Executor {
    */
   @timed
   run(): void {
-    logger.info('Execution PortChecks')
-    logger.debug('Updating last run time')
+    logger.info('Execution PortChecks');
+    logger.debug('Updating last run time');
     metrics_provider.update();
-    logger.debug('Running checks from the PortCheckProvider')
+    logger.debug('Running checks from the PortCheckProvider');
     port_check_provider.checks.forEach((a_check) => {
       a_check
         .getTask()

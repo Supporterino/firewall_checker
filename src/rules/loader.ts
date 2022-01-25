@@ -14,7 +14,7 @@ export class RuleLoader {
   }
 
   /**
-   * This function checks if there is a inventory file for the given group name via the `name` parameter. If there is 
+   * This function checks if there is a inventory file for the given group name via the `name` parameter. If there is
    * inventory file the yaml is loaded. Each rule subkey is then passed to the builder functions and all rules are collected
    * and returned to the caller.
    * @param name The name of the group to load
@@ -48,7 +48,7 @@ export class RuleLoader {
   }
 
   /**
-   * This function checks if there is a inventory file for the given host via the `name` parameter. If there is 
+   * This function checks if there is a inventory file for the given host via the `name` parameter. If there is
    * inventory file the yaml is loaded. Each rule subkey is then passed to the builder functions and all rules are collected
    * and returned to the caller.
    * @param name The name of the host to load

@@ -25,7 +25,7 @@ export class PortCheckProvider implements Provider {
    * Initializes / Clears the arrays which hold the `PortCheck`'s
    */
   private initArrays(): void {
-    logger.debug('Initializing arrays')
+    logger.debug('Initializing arrays');
     this.__checks = new Array<PortCheck>();
     this.__portRuleChecks = new Array<PortCheck>();
     this.__forwardRuleChecks = new Array<PortCheck>();
@@ -63,7 +63,7 @@ export class PortCheckProvider implements Provider {
    */
   private generatePortChecks() {
     this.initArrays();
-    logger.debug(`Creating PortChecks for all rules expect negative PortRule checks`)
+    logger.debug(`Creating PortChecks for all rules expect negative PortRule checks`);
     for (const rule of rule_provider.rules) {
       switch (rule.constructor.name) {
         case PortRule.name:
@@ -83,7 +83,7 @@ export class PortCheckProvider implements Provider {
       }
     }
 
-    logger.debug('Building the negative PortChecks for the PortRules')
+    logger.debug('Building the negative PortChecks for the PortRules');
     for (const rule of rule_provider.rules) {
       switch (rule.constructor.name) {
         case PortRule.name:
@@ -94,7 +94,7 @@ export class PortCheckProvider implements Provider {
       }
     }
 
-    logger.debug('Deduplicating the checks.')
+    logger.debug('Deduplicating the checks.');
     this.__checks = this.__checks.concat(
       this.__portRuleChecks,
       this.__forwardRuleChecks,

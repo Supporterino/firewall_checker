@@ -48,13 +48,28 @@ export class MetricsProvider implements Provider {
   receiveMetric(result: RunResult, check: PortCheck): void {
     switch (result) {
       case RunResult.EXPECTED:
-        this.addMetric('port_check_result', 0, [{ to_ip: check._host }, { to_port: check._port }, { type: check._rule.constructor.name }, { expected: getExpectedAsString(check._expected) }]);
+        this.addMetric('port_check_result', 0, [
+          { to_ip: check._host },
+          { to_port: check._port },
+          { type: check._rule.constructor.name },
+          { expected: getExpectedAsString(check._expected) }
+        ]);
         break;
       case RunResult.EXPECTED_CLOSED_BUT_OPEN:
-        this.addMetric('port_check_result', 1, [{ to_ip: check._host }, { to_port: check._port }, { type: check._rule.constructor.name }, { expected: getExpectedAsString(check._expected) }]);
+        this.addMetric('port_check_result', 1, [
+          { to_ip: check._host },
+          { to_port: check._port },
+          { type: check._rule.constructor.name },
+          { expected: getExpectedAsString(check._expected) }
+        ]);
         break;
       case RunResult.EXPECTED_OPEN_BUT_NO_RESPONSE:
-        this.addMetric('port_check_result', 2, [{ to_ip: check._host }, { to_port: check._port }, { type: check._rule.constructor.name }, { expected: getExpectedAsString(check._expected) }]);
+        this.addMetric('port_check_result', 2, [
+          { to_ip: check._host },
+          { to_port: check._port },
+          { type: check._rule.constructor.name },
+          { expected: getExpectedAsString(check._expected) }
+        ]);
         break;
       default:
         break;

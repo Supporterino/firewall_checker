@@ -22,5 +22,5 @@ export enum RunResult {
  * @returns a string representing the outcome
  */
 export const getExpectedAsString = (input: ExpectedResult): string => {
-  return ((input === ExpectedResult.OPEN) ? 'open' : 'closed')
-}
+  return input === ExpectedResult.OPEN ? 'open' : 'closed';
+};
