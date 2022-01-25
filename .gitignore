@@ -4,5 +4,3 @@ data/*
 !data/.gitkeep
 logs/*
 !logs/.gitkeep
-docs/*
-!docs/.gitkeep
