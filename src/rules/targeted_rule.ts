@@ -8,8 +8,8 @@ export class TargetedIPRule extends Rule {
   public set targetedIP(value: string) {
     this.__targetedIP = value;
   }
-  constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string, targetIP: string) {
-    super(port, proto, comment, type, target);
+  constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string, targetIP: string, isRange: boolean = false) {
+    super(port, proto, comment, type, target, isRange);
     this.__targetedIP = targetIP;
   }
 }

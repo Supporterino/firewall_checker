@@ -38,12 +38,21 @@ export abstract class Rule {
     this.__target = value;
   }
 
-  constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string) {
+  private __isRangeRule: boolean;
+  public get isRangeRule(): boolean {
+    return this.__isRangeRule;
+  }
+  public set isRangeRule(value: boolean) {
+    this.__isRangeRule = value;
+  }
+
+  constructor(port: number, proto: Protocol, comment: string, type: RuleType, target: string, isRange: boolean = false) {
     this.__port = port;
     this.__proto = proto;
     this.__comment = comment;
     this.__type = type;
     this.__target = target;
+    this.__isRangeRule = isRange;
     logger.silly(`Creating ${this.constructor.name}:`, this);
   }
 }

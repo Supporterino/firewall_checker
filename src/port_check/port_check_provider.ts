@@ -65,19 +65,15 @@ export class PortCheckProvider implements Provider {
       }
     }
 
-    let negativeJobs = new Array<PortCheck>();
     for (const rule of rule_provider.rules) {
       switch (rule.constructor.name) {
         case PortRule.name:
-          negativeJobs = negativeJobs.concat(this.generateNegativeJobsFromPortRule(rule));
+          this.__portRuleChecks = this.__portRuleChecks.concat(this.generateNegativeJobsFromPortRule(rule));
           break;
         default:
           break;
       }
     }
-
-    this.__portRuleChecks = this.__portRuleChecks.concat(negativeJobs);
-    this.__portRuleChecks = this.deduplicateChecks(this.__portRuleChecks);
 
     this.__checks = this.__checks.concat(
       this.__portRuleChecks,
@@ -238,7 +234,7 @@ export class PortCheckProvider implements Provider {
     switch (rule.type) {
       case RuleType.HOST:
         inventory_provider.hosts.forEach((host: Host) => {
-          if (host.name !== rule.target) {
+          if (host.name !== rule.target && !rule.isRangeRule) {
             const check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
             if (this.shouldAdd(check, this.__portRuleChecks)) output.push(check);
           }
@@ -247,7 +243,7 @@ export class PortCheckProvider implements Provider {
       case RuleType.GROUP:
         inventory_provider.groups.forEach((group: Group) => {
           group._hosts.forEach((host: Host) => {
-            if (group._name !== rule.target) {
+            if (group._name !== rule.target && !rule.isRangeRule) {
               const check = new PortCheck(host.ip, rule.port, ExpectedResult.CLOSED, rule);
               if (this.shouldAdd(check, this.__portRuleChecks)) output.push(check);
             }
