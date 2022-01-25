@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { executor, git_updater, inventory_provider, port_check_provider, rule_provider } from '..';
 import { logger } from '../utils';
 
+/**
+ * Router to register the api endpoints on
+ */
 export const router = Router();
 
 router.get('/stats/rules', (req, res) => {
