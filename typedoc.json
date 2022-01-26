@@ -3,5 +3,7 @@
     "entryPoints": ["./src/index.ts"],
     "includeVersion": "true",
     "name": "Firewall Check",
-    "readme": "./README.md"
+    "readme": "./README.md",
+    "entryPointStrategy": "resolve",
+    "emit": "both"
 }
