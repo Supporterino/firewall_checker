@@ -10,7 +10,7 @@ export class InventoryLoader {
 
   constructor() {
     logger.info('Creating InventoryLoader');
-    this.__invPath = join(process.cwd(), 'data/ansible/inventories/production/group_vars/ssh_boxes/vars');
+    this.__invPath = join(process.cwd(), 'data/infrastructure/ansible/inventories/production/group_vars/ssh_boxes/vars');
     this.__yamlLoader = new YamlLoader();
   }
 

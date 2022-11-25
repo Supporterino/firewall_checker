@@ -16,7 +16,7 @@
     "express": "^4.17.2",
     "helmet": "^5.0.2",
     "js-yaml": "^4.1.0",
-    "simple-git": "^2.48.0",
+    "simple-git": "^3.15.0",
     "toad-scheduler": "^1.6.0",
     "tslog": "^3.3.1"
   },

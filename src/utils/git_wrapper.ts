@@ -14,7 +14,7 @@ export class GitUpdater {
    */
   constructor() {
     logger.info('Creating new GitUpdater');
-    if (this.checkIfRepoExists()) this.gitCLI = simpleGit(join(process.cwd(), 'data/ansible'));
+    if (this.checkIfRepoExists()) this.gitCLI = simpleGit(join(process.cwd(), 'data/infrastructure/ansible'));
     else this.gitCLI = simpleGit(join(process.cwd(), 'data'));
   }
 
@@ -23,7 +23,7 @@ export class GitUpdater {
    * @returns Boolean which is `true` if the repo is checked out.
    */
   checkIfRepoExists(): boolean {
-    return existsSync(join(process.cwd(), 'data', 'ansible'));
+    return existsSync(join(process.cwd(), 'data', 'infrastructure'));
   }
 
   /**
@@ -31,14 +31,14 @@ export class GitUpdater {
    * triggered. Otherwise the repo is cloned from the remote with the `GITHUB_TOKEN` env var as auth and the wrapper
    * is switched to point to the repo.
    */
-  cloneRepo(): void {
+  async cloneRepo(): Promise<void> {
     if (this.checkIfRepoExists()) {
       logger.info('Repository is already cloned. Pulling...');
       this.pullChanges();
       return;
     }
-    this.gitCLI.clone(`https://${process.env.GITHUB_TOKEN}@github.com/knuddelsgmbh/ansible.git`);
-    this.gitCLI = simpleGit(join(process.cwd(), 'data/ansible'));
+    await this.gitCLI.clone(`https://${process.env.GITHUB_TOKEN}@github.com/knuddelsgmbh/infrastructure.git`, join(process.cwd(), 'data', 'infrastructure'));
+    this.gitCLI = simpleGit(join(process.cwd(), 'data/infrastructure'));
   }
 
   /**

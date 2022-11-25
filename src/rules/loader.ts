@@ -23,7 +23,7 @@ export class RuleLoader {
   getRulesForGroup(name: string): Array<Rule> {
     logger.info(`Trying to load rules for group: ${name}`);
     let output = new Array<Rule>();
-    const path = join(process.cwd(), 'data/ansible/inventories/production/group_vars', name, 'vars');
+    const path = join(process.cwd(), 'data/infrastructure/ansible/inventories/production/group_vars', name, 'vars');
 
     logger.debug(`Checking if group inventory at path (${path}) exists`);
     if (!this.__loader.isLoadable(path)) return output;
@@ -57,7 +57,7 @@ export class RuleLoader {
   getRulesForHost(name: string): Array<Rule> {
     logger.info(`Trying to load rules for host: ${name}`);
     let output = new Array<Rule>();
-    const path = join(process.cwd(), 'data/ansible/inventories/production/host_vars', name, 'vars');
+    const path = join(process.cwd(), 'data/infrastructure/ansible/inventories/production/host_vars', name, 'vars');
 
     logger.debug(`Checking if host inventory at path (${path}) exists`);
     if (!this.__loader.isLoadable(path)) return output;

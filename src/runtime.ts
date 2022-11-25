@@ -15,8 +15,8 @@ export class Runtime {
    * Then a schedueler is created which checks for changes on the remote every 2 hours and if there are changes component
    * updates are triggered. It also registers a task which runs the checks every 20 mins
    */
-  start(): void {
-    git_updater.cloneRepo();
+  async start(): Promise<void> {
+    await git_updater.cloneRepo();
     inventory_provider.update();
     rule_provider.update();
     port_check_provider.update();

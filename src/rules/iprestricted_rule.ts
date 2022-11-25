@@ -33,7 +33,7 @@ export class IPRestrictedRule extends Rule {
   private loadTargetsFromInventory(key: string): Array<string> {
     const loader = new YamlLoader();
     const data = loader.loadYamlFileWithKey(
-      join(process.cwd(), 'data/ansible/inventories/production/group_vars/all/vars'),
+      join(process.cwd(), 'data/infrastructure/ansible/inventories/production/group_vars/all/vars'),
       key.slice(2, -2).trim()
     );
     return data;
